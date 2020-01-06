@@ -1,6 +1,6 @@
 {
   "name": "termania_chrome_extension",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": true,
   "description": "Termania.net Lookup Chrome Extension",
   "scripts": {
