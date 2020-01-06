@@ -2,7 +2,7 @@
   "name": "termania_chrome_extension",
   "version": "1.0.4",
   "private": true,
-  "description": "Search on Termania.net Chrome Extension",
+  "description": "Termania.net Lookup Chrome Extension",
   "scripts": {
     "watch": "npm run build -- --watch",
     "build": "cross-env NODE_ENV=production webpack --hide-modules --config=webpack.config.js"
