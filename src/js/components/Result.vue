@@ -2,7 +2,7 @@
     <div class="p-4 min-h-screen">
         <div class="flex justify-center items-center">
             <a :href="url" target="_blank" rel="nofollow" class="logo">
-                <img src="/images/logo_large.png" width="200">
+                <img src="/images/logo_large.png" width="200" alt="Termania.net logo">
             </a>
         </div>
         <div v-if="result && 'html' in result" v-html="result.html" />
