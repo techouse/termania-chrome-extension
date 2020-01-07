@@ -4,7 +4,9 @@
   "private": true,
   "description": "Termania.net Lookup Chrome Extension",
   "scripts": {
-    "watch": "npm run build -- --watch",
+    "watch": "npm run development -- --watch",
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development webpack --progress --hide-modules --config=webpack.config.js",
     "build": "cross-env NODE_ENV=production webpack --hide-modules --config=webpack.config.js"
   },
   "author": "Klemen Tušar",

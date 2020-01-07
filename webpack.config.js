@@ -47,7 +47,7 @@ const config = {
     stats: {
         colors: true
     },
-    devtool: sourceMap ? "cheap-module-eval-source-map" : undefined,
+    devtool: sourceMap ? "cheap-module-source-map" : undefined,
     module: {
         rules: [
             {
