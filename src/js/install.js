@@ -1,13 +1,6 @@
 import { importDB } from "dexie-export-import"
 import db           from "@/services/db"
 import context      from "@/context"
-import { getLemma } from "@/services"
-
-export const isInstalled = () => new Promise((resolve, reject) => {
-    getLemma("a")
-        .then(() => resolve(true))
-        .catch(() => reject(Error("Extension not set up!")))
-})
 
 const install = () => {
     /**

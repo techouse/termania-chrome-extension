@@ -91,4 +91,5 @@ export default () => {
         console.log("clicked ", clickData.menuItemId)
         contextClicked(clickData)
     })
+    console.log("listening for context menu click events")
 }
