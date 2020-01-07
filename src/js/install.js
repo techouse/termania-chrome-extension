@@ -53,7 +53,6 @@ const install = () => {
                      * Open the database and add the context to Chrome once done
                      */
                     db.open()
-                      .then(() => context())
                 })
                 .catch((error) => {
                     console.error(error)
