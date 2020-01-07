@@ -1,9 +1,14 @@
+<div align="center">
+    <img width="425" height="87" src="src/images/logo_large.png">
+</div>
+
 # Termania.net Lookup Google Chrome Extension
 
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/glpefieanjalchgipjpafmhljaedgndf)
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/glpefieanjalchgipjpafmhljaedgndf)
 [![GitHub license](https://img.shields.io/github/license/techouse/termania-chrome-extension)](https://github.com/techouse/termania-chrome-extension/blob/master/LICENSE)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/10b16248e1a1496d968ee0a89c8e6fbb)](https://www.codacy.com/manual/techouse/termania-chrome-extension?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=techouse/termania-chrome-extension&amp;utm_campaign=Badge_Grade)
+![GitHub manifest.json dynamic](https://img.shields.io/github/manifest-json/permissions/techouse/termania-chrome-extension)
 
 This Google Chrome extension enables foreigners as well as Slovenian native speakers to search the extensive Slovenian
 dictionary search engine [Termania.net](https://www.termania.net) with the click of a single button.
