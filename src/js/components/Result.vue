@@ -64,9 +64,9 @@
                     this.$set(this, "error404", false)
                     this.$set(this, "complete", true)
 
-                    chrome.storage.local.set({ query: null })
-                    chrome.storage.local.set({ result: null })
-                    chrome.storage.local.set({ error404: false })
+                    chrome.storage.local.remove("query")
+                    chrome.storage.local.remove("result")
+                    chrome.storage.local.remove("error404")
                 }
 
                 if (request.msg === "error404") {
