@@ -7,11 +7,11 @@ dictionary search engine [Termania.net](https://www.termania.net) with the click
 I wanted to build something that actually solves a problem and helps people, especially foreigners
 who are trying to learn the Slovenian language.
 
-## Why Chrome and not Firefox?
-**2 reasons:**
-1. Because according to the [latest statistics](https://gs.statcounter.com/browser-market-share) Google
-Chrome has a whooping **64.3%** market share and Firefox has only **4.49%**.
-2. I only have so much free time on my hands :hourglass_flowing_sand:
+## How do I install it? :rocket:
+Simply visit Google's Chrome Web Store and [download](https://chrome.google.com/webstore/detail/termanianet-lookup/glpefieanjalchgipjpafmhljaedgndf) it.
+
+## Is there a Firefox version as well? :fox_face:
+Yes and it can be accessed [here](https://addons.mozilla.org/en-US/firefox/addon/termania-net-lookup/).
 
 ## How does it work?
 The user first needs to select a Slovenian word and right-click it to open Chrome's context menu:
