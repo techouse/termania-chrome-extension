@@ -1,12 +1,16 @@
 /**
  * Install the database if needed
  */
+import { DEFAULT_DICTIONARY_ID } from "@/services/constants"
 
 chrome.runtime.onInstalled.addListener(() => {
     import(/* webpackChunkName: "services" */ "@/services").then(({ getDictionaries }) => {
         getDictionaries().then(() => {
             import(/* webpackChunkName: "dictionary" */ "@/models/Dictionary").then(({ default: Dictionary }) => {
                 Dictionary.getActive()
+                          .catch(() => {
+                              chrome.storage.local.get("dictionaries", ({ dictionaries }) => Dictionary.setActive(dictionaries.dictionaries.find((dict) => dict.id === DEFAULT_DICTIONARY_ID)))
+                          })
             })
         })
     })
