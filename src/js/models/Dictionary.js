@@ -33,7 +33,8 @@ export default class Dictionary {
             chrome.storage.local.get("dictionary", ({ dictionary }) => {
                 if (!dictionary) {
                     chrome.storage.local.get("dictionaries", ({ dictionaries }) => {
-                        resolve(resolve(dictionaries.dictionaries.find((dict) => dict.id === DEFAULT_DICTIONARY_ID)))
+                        const defaultDictionary = dictionaries.dictionaries.find((dict) => dict.id === DEFAULT_DICTIONARY_ID)
+                        chrome.storage.local.set({ dictionary: defaultDictionary }, () => resolve(resolve(defaultDictionary)))
                     })
                 }
 
