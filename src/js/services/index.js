@@ -1,28 +1,40 @@
-import { addMinutes }                          from "date-fns"
-import md5                                     from "crypto-js/md5"
-import api                                     from "./api"
-import db                                      from "./db"
-import { dictionaries, CACHE_TIME_IN_MINUTES } from "./constants"
+import { addDays }                              from "date-fns"
+import md5                                      from "crypto-js/md5"
+import api                                      from "./api"
+import db                                       from "./db"
+import { CACHE_IN_DAYS, DEFAULT_DICTIONARY_ID } from "./constants"
+import Dictionary                               from "@/models/Dictionary"
+import Entry                                    from "@/models/Entry"
+import EntryIndex                               from "@/models/EntryIndex"
 
+
+const getDictionaryList = () => new Promise((resolve, reject) => {
+    api.get("/dictionary/list")
+       .then(({ data }) => resolve({
+           dictionaries: data.Dictionaries.map((el) => new Dictionary(el)),
+           total: Number(data.Total),
+       }))
+       .catch((error) => reject(error))
+})
 
 const getEntryIndex = (query, dictionaryId) => new Promise((resolve, reject) => {
-    api.get("/entry-index", {
+    api.get("/search/entry-index", {
            params: {
                dictionaryId,
                query,
                headword: query,
            },
        })
-       .then(({ data }) => resolve({
+       .then(({ data }) => resolve(new EntryIndex({
            ...data,
            query,
            dictionaryId,
-       }))
+       })))
        .catch((error) => reject(error))
 })
 
 const getEntry = (entryId, dictionaryId) => new Promise((resolve, reject) => {
-    api.get("/get-entry", {
+    api.get("/search/get-entry", {
            params: {
                dictionaryId,
                entryId,
@@ -31,20 +43,11 @@ const getEntry = (entryId, dictionaryId) => new Promise((resolve, reject) => {
                Accept: "text/xml", // specifically request an XML payload
            },
        })
-       .then(({ data }) => {
-           const parser = new DOMParser()
-           const xmlDoc = parser.parseFromString(data, "text/xml")
-           return resolve({
-               dictionaryId: Number(xmlDoc.getElementsByTagName("dictionary_id")[0].childNodes[0].nodeValue),
-               entryId: Number(xmlDoc.getElementsByTagName("entry_id")[0].childNodes[0].nodeValue),
-               headword: xmlDoc.getElementsByTagName("headword")[0].childNodes[0].nodeValue,
-               html: xmlDoc.getElementsByTagName("html_content")[0].innerHTML,
-           })
-       })
+       .then(({ data }) => resolve(Entry.fromXML(data)))
        .catch((error) => reject(error))
 })
 
-export const search = (query, dictionaryId = dictionaries.presis) => new Promise((resolve, reject) => {
+export const search = (query, dictionaryId = DEFAULT_DICTIONARY_ID) => new Promise((resolve, reject) => {
     const cacheKey = md5(`${query}_${dictionaryId}`)
         .toString()
 
@@ -62,36 +65,32 @@ export const search = (query, dictionaryId = dictionaries.presis) => new Promise
          */
         getEntryIndex(query, dictionaryId)
             .then((entryIndex) => {
+                console.log(entryIndex)
                 /**
                  * Check if there are any results
                  */
-                if (entryIndex.AbsoluteIndex > -1 && entryIndex.RelativeIndex > -1) {
-                    getEntry(entryIndex.AbsoluteIndex, dictionaryId)
+                if (entryIndex.absoluteIndex > -1 && entryIndex.relativeIndex > -1) {
+                    return getEntry(entryIndex.absoluteIndex, dictionaryId)
                         .then((entry) => {
                             /**
                              * Cache the result
                              */
                             const cache = {}
-                            cache[cacheKey] = {
-                                query,
-                                ...entry,
-                                expires: addMinutes(new Date(), CACHE_TIME_IN_MINUTES)
-                                    .toISOString(),
-                            }
+                            cache[cacheKey] = entry.mappedForCache(query)
                             chrome.storage.local.set(cache)
 
                             /**
-                             * Resolve the HTML element
+                             * Resolve the Entry
                              */
                             return resolve(cache[cacheKey])
                         })
                         .catch((error) => reject(error))
-                } else {
-                    /**
-                     * In case there are no results
-                     */
-                    return reject(Error("Search query yielded no results!"))
                 }
+
+                /**
+                 * In case there are no results
+                 */
+                return reject(Error("Search query yielded no results!"))
             })
             .catch((error) => reject(error))
     })
@@ -114,4 +113,42 @@ export const getLemma = (query) => new Promise((resolve, reject) => {
       .catch((error) => {
           console.warn(error.stack || error)
       })
+})
+
+export const getDictionaries = () => new Promise((resolve, reject) => {
+    chrome.storage.local.get("dictionaries", (data) => {
+        if (!data.dictionaries || new Date(data.dictionaries.expires) <= new Date()) {
+            // get dictionary list form Termania and store it in cache
+            return getDictionaryList()
+                .then(({ dictionaries, total }) => {
+                    if (!total) {
+                        return reject(Error("Termania.net API returned 0 dictionaries!"))
+                    }
+
+                    return chrome.storage.local.set({
+                        dictionaries: {
+                            dictionaries,
+                            total,
+                            expires: addDays(new Date(), CACHE_IN_DAYS)
+                                .toISOString(),
+                        },
+                    }, () => resolve(dictionaries))
+                })
+                .catch((error) => {
+                    console.warn("Could not fetch dictionary list from Termania.net")
+                    return reject(error)
+                })
+        }
+
+        return resolve(data.dictionaries.dictionaries)
+    })
+})
+
+export const getDictionary = (dictionaryId) => new Promise((resolve, reject) => {
+    getDictionaries()
+        .then((dictionaries) => {
+            const dictionary = dictionaries.find((dict) => dict.id === dictionaryId)
+            return dictionary ? resolve(dictionary) : reject(Error("Dictionary not found!"))
+        })
+        .catch((error) => reject(error))
 })
