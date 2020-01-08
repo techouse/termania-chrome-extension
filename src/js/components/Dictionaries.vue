@@ -13,8 +13,8 @@
                                    :option-key="optionKey"
                                    :option-label="optionLabel"
                                    :get-option-description="getOptionDescription"
+                                   :placeholder="$t('Type to search a dictionary ...')"
                                    max-height="300px"
-                                   placeholder="Type to search a dictionary ..."
                                    @input="valueChanged"
                 />
             </label>
