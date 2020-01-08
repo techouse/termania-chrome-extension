@@ -1,6 +1,5 @@
 import { language }              from "language-tags"
 import { camel }                 from "case"
-import { getDictionaries }       from "@/services"
 import { DEFAULT_DICTIONARY_ID } from "@/services/constants"
 
 export default class Dictionary {
@@ -36,8 +35,9 @@ export default class Dictionary {
         return new Promise((resolve) => {
             chrome.storage.local.get("dictionary", ({ dictionary }) => {
                 if (!dictionary) {
-                    getDictionaries()
-                        .then(({ dictionaries }) => resolve(dictionaries.find((dict) => dict.id === DEFAULT_DICTIONARY_ID)))
+                    chrome.storage.local.get("dictionaries", ({ dictionaries }) => {
+                        resolve(resolve(dictionaries.dictionaries.find((dict) => dict.id === DEFAULT_DICTIONARY_ID)))
+                    })
                 }
 
                 return resolve(dictionary)
