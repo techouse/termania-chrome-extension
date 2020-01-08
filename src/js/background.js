@@ -1,9 +1,14 @@
 /**
  * Install the database if needed
  */
+
 chrome.runtime.onInstalled.addListener(() => {
     import(/* webpackChunkName: "services" */ "@/services").then(({ getDictionaries }) => {
-        getDictionaries()
+        getDictionaries().then(() => {
+            import(/* webpackChunkName: "dictionary" */ "@/models/Dictionary").then(({ default: Dictionary }) => {
+                Dictionary.getActive()
+            })
+        })
     })
 
     import(/* webpackChunkName: "install" */ "@/install").then(({ default: install }) => {
