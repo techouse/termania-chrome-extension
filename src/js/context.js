@@ -1,6 +1,3 @@
-import { getLemma, search } from "@/services"
-import Dictionary           from "@/models/Dictionary"
-
 export const contextMenuItem = {
     id: "termania_menu",
     title: "Search on Termania.net",
@@ -28,58 +25,62 @@ export const contextClicked = (clickData) => {
                 height: 480,
             })
 
-            getLemma(query)
-                .then((lemma) => {
-                    console.log("[OK] LEMMA: ", lemma)
+            import(/* webpackChunkName: "services" */ "@/services").then(({ getLemma, search }) => {
+                getLemma(query)
+                    .then((lemma) => {
+                        console.log("[OK] LEMMA: ", lemma)
 
-                    Dictionary.getActive()
-                              .then(({ id }) => {
-                                  search(lemma, id)
-                                      .then((result) => {
-                                          console.log("[OK] SEARCH RESULT: ", result)
+                        import(/* webpackChunkName: "dictionary" */ "@/models/Dictionary").then(({ default: Dictionary }) => {
+                            Dictionary.getActive()
+                                      .then(({ id }) => {
+                                          search(lemma, id)
+                                              .then((result) => {
+                                                  console.log("[OK] SEARCH RESULT: ", result)
 
-                                          chrome.storage.local.set({ result }, () => {
-                                              chrome.runtime.sendMessage({
-                                                  msg: "search_complete",
-                                                  data: {
-                                                      result,
-                                                      query,
-                                                  },
+                                                  chrome.storage.local.set({ result }, () => {
+                                                      chrome.runtime.sendMessage({
+                                                          msg: "search_complete",
+                                                          data: {
+                                                              result,
+                                                              query,
+                                                          },
+                                                      })
+                                                  })
                                               })
-                                          })
-                                      })
-                                      .catch(() => {
-                                          console.log(`[ERROR] NO SEARCH RESULTS FOR "${query}"`)
+                                              .catch(() => {
+                                                  console.log(`[ERROR] NO SEARCH RESULTS FOR "${query}"`)
 
-                                          chrome.runtime.sendMessage({
-                                              msg: "error404",
-                                              data: {
-                                                  error: "Search query yielded no results!",
-                                                  query,
-                                              },
-                                          })
-                                          chrome.storage.local.set({
-                                              error404: true,
-                                              query,
-                                          })
+                                                  chrome.runtime.sendMessage({
+                                                      msg: "error404",
+                                                      data: {
+                                                          error: "Search query yielded no results!",
+                                                          query,
+                                                      },
+                                                  })
+                                                  chrome.storage.local.set({
+                                                      error404: true,
+                                                      query,
+                                                  })
+                                              })
                                       })
-                              })
-                })
-                .catch(() => {
-                    console.log(`[ERROR] NO LEMMA FOUND FOR "${query}"`)
+                        })
+                    })
+                    .catch(() => {
+                        console.log(`[ERROR] NO LEMMA FOUND FOR "${query}"`)
 
-                    chrome.runtime.sendMessage({
-                        msg: "error404",
-                        data: {
-                            error: "Lemma not found!",
+                        chrome.runtime.sendMessage({
+                            msg: "error404",
+                            data: {
+                                error: "Lemma not found!",
+                                query,
+                            },
+                        })
+                        chrome.storage.local.set({
+                            error404: true,
                             query,
-                        },
+                        })
                     })
-                    chrome.storage.local.set({
-                        error404: true,
-                        query,
-                    })
-                })
+            })
         })
     }
 }

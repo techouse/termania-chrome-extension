@@ -1,4 +1,3 @@
-import { language }              from "language-tags"
 import { camel }                 from "case"
 import { DEFAULT_DICTIONARY_ID } from "@/services/constants"
 
@@ -22,8 +21,6 @@ export default class Dictionary {
                 // In case there's more than 1 language make all the languages unique
                 this.languages = [...new Set(this.languages)]
             }
-
-            this.languages = this.languages.map((lang) => language(lang.toLowerCase()))
         }
     }
 

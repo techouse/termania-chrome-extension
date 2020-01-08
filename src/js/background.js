@@ -1,17 +1,23 @@
-import install                        from "@/install"
-import context, { createContextMenu } from "@/context"
-import { getDictionaries }            from "@/services"
-
 /**
  * Install the database if needed
  */
 chrome.runtime.onInstalled.addListener(() => {
-    getDictionaries()
-    install()
-    createContextMenu()
+    import(/* webpackChunkName: "services" */ "@/services").then(({ getDictionaries }) => {
+        getDictionaries()
+    })
+
+    import(/* webpackChunkName: "install" */ "@/install").then(({ default: install }) => {
+        install()
+    })
+
+    import(/* webpackChunkName: "context" */ "@/context").then(({ createContextMenu }) => {
+        createContextMenu()
+    })
 })
 
 /**
  * Add the context menu
  */
-context()
+import(/* webpackChunkName: "context" */ "@/context").then(({ default: context }) => {
+    context()
+})
