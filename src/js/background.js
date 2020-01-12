@@ -19,6 +19,10 @@ chrome.runtime.onInstalled.addListener(() => {
         install()
     })
 
+    // import(/* webpackChunkName: "rebuild" */ "@/rebuild").then(({ default: rebuild }) => {
+    //     rebuild(chrome.runtime.getURL("data/sloleks.json"))
+    // })
+
     import(/* webpackChunkName: "context" */ "@/context").then(({ createContextMenu }) => {
         createContextMenu()
     })
