@@ -68,7 +68,7 @@ export const contextClicked = (clickData) => {
                                   import(/* webpackChunkName: "services" */ "@/services").then(({ getLemma }) => {
                                       getLemma(query)
                                           .then((lemma) => {
-                                              console.log("[OK] LEMMA: ", lemma)
+                                              console.log("[OK] COMMON LEMMA: ", lemma)
 
                                               findDefinition(lemma, id)
                                           })
