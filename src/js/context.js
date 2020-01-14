@@ -86,8 +86,9 @@ const createWindow = () => {
                  * Store it in local storage
                  */
                 chrome.storage.local.set({
-                    popupWindowIds: popupWindowIds.filter((id) => !removedIds.includes(id))
-                                                  .concat([popupWindow.id]),
+                    popupWindowIds: popupWindowIds ? popupWindowIds.filter((id) => !removedIds.includes(id))
+                                                                   .concat([popupWindow.id])
+                                                   : [popupWindow.id],
                 })
             })
         })
