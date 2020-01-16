@@ -9,6 +9,24 @@ body {
   @apply font-body;
   font-size: 16px;
   width: 480px;
+
+  @media (prefers-color-scheme: dark) {
+    * {
+      & {
+        :not(.dropdown)
+        :not(.form-checkbox) {
+          @apply text-white;
+        }
+      }
+    }
+    background-color: #292A2D;
+  }
+}
+
+.text-gray-700 {
+  @media (prefers-color-scheme: dark) {
+    color: #8BB4F8 !important;
+  }
 }
 
 @import "vue-single-select";

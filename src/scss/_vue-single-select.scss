@@ -185,6 +185,10 @@
 
 .hover\:bg-grey-light:hover {
   background-color: #dae1e7;
+
+  @media (prefers-color-scheme: dark) {
+    color: #000;
+  }
 }
 
 .shadow-md {
@@ -204,6 +208,11 @@
   border-radius: 0.25em;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   box-sizing: border-box;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #202428 !important;
+    color: #fff !important;
+  }
 }
 
 .icons {
@@ -226,7 +235,12 @@
 
 .required {
   background-color: #fffbfb !important;
-  border-color: #f5c6cb;
+  border-color: #f5c6cb !important;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #281e1f !important;
+    color: #fff !important;
+  }
 }
 
 .cursor-pointer {
@@ -243,6 +257,11 @@
   line-height: 1.25;
   text-align: left;
   @apply mb-4;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #202428 !important;
+    color: #53575A !important;
+  }
 }
 
 .dropdown > li {
@@ -251,5 +270,10 @@
 
 .active {
   background: #dae1e7;
+
+  @media (prefers-color-scheme: dark) {
+    background: #C6DAFC !important;
+    color: #000 !important;
+  }
 }
 /* purgecss start ignore */
