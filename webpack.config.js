@@ -122,15 +122,27 @@ const config = {
             patterns: [
                 {
                     from: path.resolve(__dirname, "src/html"),
-                    to: path.resolve(__dirname, "build/html")
+                    to: path.resolve(__dirname, "build/html"),
+                    globOptions: {
+                        dot: true,
+                        ignore: ["**/.DS_Store"],
+                    },
                 },
                 {
                     from: path.resolve(__dirname, "src/images"),
-                    to: path.resolve(__dirname, "build/images")
+                    to: path.resolve(__dirname, "build/images"),
+                    globOptions: {
+                        dot: true,
+                        ignore: ["**/.DS_Store"],
+                    },
                 },
                 {
                     from: path.resolve(__dirname, "src/data"),
-                    to: path.resolve(__dirname, "build/data")
+                    to: path.resolve(__dirname, "build/data"),
+                    globOptions: {
+                        dot: true,
+                        ignore: ["**/.DS_Store"],
+                    },
                 },
                 {
                     from: path.resolve(__dirname, "manifest.json"),
